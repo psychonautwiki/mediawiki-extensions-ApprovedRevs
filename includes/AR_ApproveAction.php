@@ -47,7 +47,7 @@ class ARApproveAction extends Action {
 			$out->addHTML( "\t\t" . Xml::element(
 				'div',
 				array( 'class' => 'errorbox' ),
-				wfMessage( 'approvedrevs-approvedandlatest' )->text()
+				wfMessage( 'approvedrevs-alreadyapproved' )->text()
 			) . "\n" );
 		} else {
 			ApprovedRevs::setApprovedRevID( $title, $revisionID, false, $user );

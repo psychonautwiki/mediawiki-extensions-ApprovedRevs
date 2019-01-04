@@ -18,6 +18,7 @@
 	"approvedrevs-unapproveaction": "unset approved revision for \"[[$1]]\"",
 	"approvedrevs-notlatest": "This is the approved revision of this page; it is not the most recent.",
 	"approvedrevs-approvedandlatest": "This is the approved revision of this page, as well as being the most recent.",
+	"approvedrevs-alreadyapproved": "This revision has already been approved.",
 	"approvedrevs-blankpageshown": "No revision has been approved for this page.",
 	"approvedrevs-noapprovedrevision": "This is the latest revision of this page; it has no approved revision.",
 	"approvedrevs-editwarning": "Please note that you are now editing the latest revision of this page, which is not the approved one shown by default.",
