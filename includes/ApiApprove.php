@@ -46,17 +46,35 @@ class ApiApprove extends ApiBase {
 				ApprovedRevs::unsetApproval( $title );
 				$this->getResult()->addValue( null, $this->getModuleName(), array( 'result' => 'Page now has no approved revision.', 'title' => $title ) );
 			}
-		} else { // This is a call to approve a revision.
-			if ( $revid == $curApprovedRev ) {
-				// This is already the approved revision - just send an empty result back.
-				$this->getResult()->addValue( null, $this->getModuleName(), array( 'result' => 'This revision was already approved!', 'title' => $title ) );
-			} else {
-				ApprovedRevs::setApprovedRevID( $title, $revid );
-				$this->getResult()->addValue( null, $this->getModuleName(), array( 'result' => 'Revision was successfully approved.', 'title' => $title ) );
 
-			}
+			return;
+		}
+			
+		// This is a call to approve a revision.
+		if ( $revid == $curApprovedRev ) {
+			// This is already the approved revision - just send an empty result back.
+			$this->getResult()->addValue(
+				null,
+				$this->getModuleName(),
+				[
+					'result' => 'This revision was already approved!',
+					'title' => $title
+				]
+			);
+
+			return;
 		}
 
+		ApprovedRevs::setApprovedRevID( $title, $revid );
+
+		$this->getResult()->addValue(
+			null,
+			$this->getModuleName(),
+			[
+				'result' => 'Revision was successfully approved.',
+				'title' => $title
+			]
+		);
 	}
 
 	public function getAllowedParams() {

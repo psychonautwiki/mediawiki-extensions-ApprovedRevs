@@ -39,15 +39,25 @@ class ARApproveAction extends Action {
 
 		$revisionID = $request->getVal( 'oldid' );
 
-		ApprovedRevs::setApprovedRevID( $title, $revisionID, false, $user );
+		$curApprovedRev = ApprovedRevs::getApprovedRevID( $title );
 
 		$out = $this->getOutput();
 
-		$out->addHTML( "\t\t" . Xml::element(
-			'div',
-			array( 'class' => 'successbox' ),
-			wfMessage( 'approvedrevs-approvesuccess' )->text()
-		) . "\n" );
+		if ( $revisionID == $curApprovedRev ) {
+			$out->addHTML( "\t\t" . Xml::element(
+				'div',
+				array( 'class' => 'errorbox' ),
+				wfMessage( 'approvedrevs-approvedandlatest' )->text()
+			) . "\n" );
+		} else {
+			ApprovedRevs::setApprovedRevID( $title, $revisionID, false, $user );
+
+			$out->addHTML( "\t\t" . Xml::element(
+				'div',
+				array( 'class' => 'successbox' ),
+				wfMessage( 'approvedrevs-approvesuccess' )->text()
+			) . "\n" );
+		}
 
 		$out->addHTML( "\t\t" . Xml::element(
 			'p',
@@ -59,7 +69,7 @@ class ARApproveAction extends Action {
 		$this->page->doPurge();
 
 		// Show the revision.
-                $this->page->view();
+        $this->page->view();
 	}
 
 	/**
