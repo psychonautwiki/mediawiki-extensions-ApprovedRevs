@@ -442,7 +442,7 @@ class ApprovedRevs {
 		return false;
 	}
 
-	public static function saveApprovedRevIDInDB( $title, $rev_id, $isAutoApprove = true ) {
+	public static function saveApprovedRevIDInDB( Title $title, $rev_id, $isAutoApprove = true ) {
 		global $wgUser;
 		$userBit = array();
 
@@ -476,7 +476,7 @@ class ApprovedRevs {
 	 * so that category information can be stored correctly, as well as
 	 * info for extensions such as Semantic MediaWiki; and logs the action.
 	 */
-	public static function setApprovedRevID( $title, $rev_id, $is_latest = false ) {
+	public static function setApprovedRevID( Title $title, $rev_id, $is_latest = false, $user ) {
 		self::saveApprovedRevIDInDB( $title, $rev_id, false );
 
 		$content = Revision::newFromTitle( $title, $rev_id )->getContent();
@@ -491,25 +491,35 @@ class ApprovedRevs {
 			self::setPageSearchText( $title, $output->getText() );
 		}
 
-		$log = new LogPage( 'approval' );
-		$rev_url = $title->getFullURL( array( 'oldid' => $rev_id ) );
+		$rev_url = $title->getFullURL( [
+			'oldid' => $rev_id
+		] );
+
 		$rev_link = Xml::element(
 			'a',
-			array( 'href' => $rev_url ),
+			[ 'href' => $rev_url ],
 			$rev_id
 		);
-		$logParams = array( $rev_link );
-		$log->addEntry(
-			'approve',
-			$title,
-			'',
-			$logParams
-		);
+
+		$logParams = [
+			'rev_link' => $rev_link,
+			'rev_id' => $rev_id,
+		];
+
+		$entry = new ManualLogEntry( 'approval', 'approve' );
+
+		$entry->setTarget( $title );
+		$entry->setParameters( $logParams );
+		$entry->setPerformer( $user );
+
+		$logid = $entry->insert();
+
+		$entry->publish( $logid, 'udp' );
 
 		Hooks::run( 'ApprovedRevsRevisionApproved', array( $output, $title, $rev_id, $content ) );
 	}
 
-	public static function deleteRevisionApproval( $title ) {
+	public static function deleteRevisionApproval( Title $title ) {
 		$dbr = wfGetDB( DB_MASTER );
 		$page_id = $title->getArticleID();
 		$dbr->delete( 'approved_revs', array( 'page_id' => $page_id ) );
@@ -521,7 +531,7 @@ class ApprovedRevs {
 	 * information can be stored correctly, as well as info for
 	 * extensions such as Semantic MediaWiki; and logs the action.
 	 */
-	public static function unsetApproval( $title ) {
+	public static function unsetApproval( Title $title ) {
 		global $egApprovedRevsBlankIfUnapproved;
 
 		self::deleteRevisionApproval( $title );
@@ -533,12 +543,15 @@ class ApprovedRevs {
 		$u->doUpdate();
 		self::setPageSearchText( $title, $output->getText() );
 
-		$log = new LogPage( 'approval' );
-		$log->addEntry(
-			'unapprove',
-			$title,
-			''
-		);
+		$entry = new ManualLogEntry( 'approval', 'unapprove' );
+
+		$entry->setTarget( $title );
+		$entry->setParameters( [] );
+		$entry->setPerformer( $user );
+
+		$logid = $entry->insert();
+
+		$entry->publish( $logid, 'udp' );
 
 		Hooks::run( 'ApprovedRevsRevisionUnapproved', array( $output, $title, $content ) );
 	}

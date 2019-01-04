@@ -31,19 +31,24 @@ class ARApproveAction extends Action {
 		if ( ! ApprovedRevs::userCanApprove( $user, $title ) ) {
 			return true;
 		}
+
 		$request = $this->getRequest();
 		if ( ! $request->getCheck( 'oldid' ) ) {
 			return true;
 		}
+
 		$revisionID = $request->getVal( 'oldid' );
-		ApprovedRevs::setApprovedRevID( $title, $revisionID );
+
+		ApprovedRevs::setApprovedRevID( $title, $revisionID, false, $user );
 
 		$out = $this->getOutput();
+
 		$out->addHTML( "\t\t" . Xml::element(
 			'div',
 			array( 'class' => 'successbox' ),
 			wfMessage( 'approvedrevs-approvesuccess' )->text()
 		) . "\n" );
+
 		$out->addHTML( "\t\t" . Xml::element(
 			'p',
 			array( 'style' => 'clear: both' )
