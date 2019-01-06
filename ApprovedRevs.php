@@ -51,6 +51,7 @@ $egApprovedRevsEnabledNamespaces = array(
 $egApprovedRevsSelfOwnedNamespaces = array();
 $egApprovedRevsBlankIfUnapproved = false;
 $egApprovedRevsAutomaticApprovals = true;
+$egApprovedRevsAutomaticPatrols = true;
 $egApprovedRevsShowRevisionDiffBigButton = false;
 $egApprovedRevsShowApproveLatest = false;
 $egApprovedRevsShowNotApprovedMessage = false;

@@ -470,13 +470,42 @@ class ApprovedRevs {
 		DeferredUpdates::addUpdate( new SearchUpdate( $title->getArticleID(), $title->getText(), $text ) );
 	}
 
+	/* Mark a revision as patrolled */
+	public static function patrolRevisionIfNeeded( int $rev_id ) {
+		global $egApprovedRevsAutomaticPatrols;
+
+		if ( ! $egApprovedRevsAutomaticPatrols ) {
+			return;
+		}
+		
+		$rev = Revision::newFromId( $rev_id );
+
+		$db = wfGetDB( DB_REPLICA );
+		$change = RecentChange::newFromConds(
+			[
+				'rc_timestamp' => $db->timestamp( $rev->getTimestamp() ),
+				'rc_this_oldid' => $rev_id,
+				'rc_patrolled' => RecentChange::PRC_UNPATROLLED
+			],
+			__METHOD__
+		);
+
+		if ( ! $change ) {
+			return;
+		}
+
+		$rcid = $change->getAttribute( 'rc_id' );
+
+		RecentChange::markPatrolled( $rcid, true );
+	}
+
 	/**
 	 * Sets a certain revision as the approved one for this page in the
 	 * approved_revs DB table; calls a "links update" on this revision
 	 * so that category information can be stored correctly, as well as
 	 * info for extensions such as Semantic MediaWiki; and logs the action.
 	 */
-	public static function setApprovedRevID( Title $title, $rev_id, $is_latest = false, $user ) {
+	public static function setApprovedRevID( Title $title, $rev_id, bool $is_latest = false, $user ) {
 		$prevApprovedRev = ApprovedRevs::getApprovedRevID( $title );
 
 		$rev_id_int = intval($rev_id);
@@ -526,6 +555,8 @@ class ApprovedRevs {
 		$entry->publish( $logid, 'udp' );
 
 		Hooks::run( 'ApprovedRevsRevisionApproved', array( $output, $title, $rev_id, $content ) );
+
+		ApprovedRevs::patrolRevisionIfNeeded($rev_id_int);
 	}
 
 	public static function deleteRevisionApproval( Title $title ) {

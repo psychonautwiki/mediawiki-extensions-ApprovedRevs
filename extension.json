@@ -185,6 +185,7 @@
 		"ApprovedRevsSelfOwnedNamespaces": [],
 		"ApprovedRevsBlankIfUnapproved": false,
 		"ApprovedRevsAutomaticApprovals": true,
+		"ApprovedRevsAutomaticPatrols": false,
 		"ApprovedRevsShowRevisionDiffBigButton": false,
 		"ApprovedRevsShowApproveLatest": false,
 		"ApprovedRevsShowNotApprovedMessage": false
