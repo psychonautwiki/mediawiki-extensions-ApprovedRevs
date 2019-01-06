@@ -479,6 +479,12 @@ class ApprovedRevs {
 	public static function setApprovedRevID( Title $title, $rev_id, $is_latest = false, $user ) {
 		$prevApprovedRev = ApprovedRevs::getApprovedRevID( $title );
 
+		$rev_id_int = intval($rev_id);
+
+		if ( $rev_id_int == 0 ) {
+			$rev_id_int = null;
+		}
+
 		self::saveApprovedRevIDInDB( $title, $rev_id, false );
 
 		$content = Revision::newFromTitle( $title, $rev_id )->getContent();
@@ -505,7 +511,7 @@ class ApprovedRevs {
 
 		$logParams = [
 			'rev_link' => $rev_link,
-			'rev_id' => $rev_id,
+			'rev_id' => $rev_id_int,
 			'old_rev_id' => $prevApprovedRev
 		];
 
