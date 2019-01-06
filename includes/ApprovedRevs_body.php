@@ -543,6 +543,8 @@ class ApprovedRevs {
 	public static function unsetApproval( Title $title ) {
 		global $egApprovedRevsBlankIfUnapproved;
 
+		$prevApprovedRev = ApprovedRevs::getApprovedRevID( $title );
+
 		self::deleteRevisionApproval( $title );
 
 		$revision = Revision::newFromTitle( $title );
@@ -552,10 +554,14 @@ class ApprovedRevs {
 		$u->doUpdate();
 		self::setPageSearchText( $title, $output->getText() );
 
+		$logParams = [
+			'old_rev_id' => $prevApprovedRev
+		];
+
 		$entry = new ManualLogEntry( 'approval', 'unapprove' );
 
 		$entry->setTarget( $title );
-		$entry->setParameters( [] );
+		$entry->setParameters( $logParams );
 		$entry->setPerformer( $user );
 
 		$logid = $entry->insert();
