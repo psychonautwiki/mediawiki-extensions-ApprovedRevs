@@ -740,10 +740,13 @@ class ApprovedRevsHooks {
 		$approvedRevID = ApprovedRevs::getApprovedRevID( $title );
 
 		if ( ApprovedRevs::userCanApprove( $user, $title ) && $oldRev->getID() == $approvedRevID ) {
+			global $wgOut;
+			$wgOut->addModules('ext.ApprovedRevs.revTools');
+
 			// array key is class applied to <span> wrapping around link
 			// default if blank is mw-diff-tool; add that along with extension-specific class
 			$newHeader .=
-				' <span class="patrollink" data-mw="interface">'
+				' <span class="approvelink" data-mw="interface">'
 					. HTML::element(
 						'a',
 						array(

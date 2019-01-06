@@ -71,6 +71,13 @@
 	"ResourceModules": {
 		"ext.ApprovedRevs": {
 			"styles": "resources/ApprovedRevs.css"
+		},
+		"ext.ApprovedRevs.revTools": {
+			"scripts": "resources/ApprovedRevs.revTools.js",
+			"messages": [
+				"approvednotify",
+				"approvederrornotify"
+			]
 		}
 	},
 	"ResourceFileModulePaths": {
