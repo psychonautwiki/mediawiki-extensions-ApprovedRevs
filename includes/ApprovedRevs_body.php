@@ -540,7 +540,7 @@ class ApprovedRevs {
 	 * information can be stored correctly, as well as info for
 	 * extensions such as Semantic MediaWiki; and logs the action.
 	 */
-	public static function unsetApproval( Title $title ) {
+	public static function unsetApproval( Title $title, $user ) {
 		global $egApprovedRevsBlankIfUnapproved;
 
 		$prevApprovedRev = ApprovedRevs::getApprovedRevID( $title );
