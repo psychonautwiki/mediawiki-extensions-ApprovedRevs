@@ -65,7 +65,7 @@ class ApiApprove extends ApiBase {
 			return;
 		}
 
-		ApprovedRevs::setApprovedRevID( $title, $revid );
+		ApprovedRevs::setApprovedRevID( $title, $revid, false, $wgUser );
 
 		$this->getResult()->addValue(
 			null,

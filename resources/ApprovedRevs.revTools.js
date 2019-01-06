@@ -25,7 +25,7 @@
 				var title;
 				// Remove all approvelinks from the page (including any spinners inside).
 				approvelinks.closest( '.approvelink' ).remove();
-				if ( data.patrol !== undefined ) {
+				if ( data.approve !== undefined ) {
 					// Success
 					title = new mw.Title( data.patrol.title );
 					mw.notify( "Revision was successfully approved." );
