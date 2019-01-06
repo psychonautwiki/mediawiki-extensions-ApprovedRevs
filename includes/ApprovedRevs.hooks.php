@@ -715,6 +715,54 @@ class ApprovedRevsHooks {
 	}
 
 	/**
+	 * If the user is allowed to make revision approvals, add an
+	 * 'approve' link to the diff revision page when comparing to
+	 * previously approved revision.
+	 */
+	static function addApprovalDiffLinkNewHeader( DifferenceEngine $diffEngine, &$newHeader ) {
+		global $egApprovedRevsShowRevisionDiffBigButton;
+
+		if ( ! $egApprovedRevsShowRevisionDiffBigButton ) {
+			return true;
+		}
+
+		$user = $diffEngine->getUser();
+
+		$newRev = $diffEngine->mNewRev;
+		$oldRev = $diffEngine->mOldRev;
+
+		$title = $newRev->getTitle();
+
+		if ( ! ApprovedRevs::pageIsApprovable( $title ) ) {
+			return true;
+		}
+
+		$approvedRevID = ApprovedRevs::getApprovedRevID( $title );
+
+		if ( ApprovedRevs::userCanApprove( $user, $title ) && $oldRev->getID() == $approvedRevID ) {
+			// array key is class applied to <span> wrapping around link
+			// default if blank is mw-diff-tool; add that along with extension-specific class
+			$newHeader .=
+				' <span class="patrollink" data-mw="interface">'
+					. HTML::element(
+						'a',
+						array(
+							'href' => $title->getLocalUrl( array(
+								'action' => 'approve',
+								'oldid' => $newRev->getId()
+							) ),
+							'class' => 'ext-approved-revs-approval-link',
+							'title' => wfMessage( 'approvedrevs-approvethisrev' )->text()
+						),
+						wfMessage( 'approvedrevs-approve' )->text()
+					)
+				. '</span>';
+		}
+
+		return true;
+	}
+
+	/**
 	 * Use the approved revision, if it exists, for templates and other
 	 * transcluded pages.
 	 */

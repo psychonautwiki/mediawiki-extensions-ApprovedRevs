@@ -84,30 +84,67 @@
 		"unapprovefile": "ARUnapproveFileAction"
 	},
 	"Hooks": {
+		"AdminLinks": [
+			"ApprovedRevsHooks::addToAdminLinks"
+		],
+		"ArticleAfterFetchContentObject": [
+			"ApprovedRevsHooks::showBlankIfUnapproved"
+		],
+		"ArticleDeleteComplete": [
+			"ApprovedRevsHooks::deleteRevisionApproval"
+		],
 		"ArticleEditUpdates": [
 			"ApprovedRevsHooks::updateLinksAfterEdit"
+		],
+		"ArticleFromTitle": [
+			"ApprovedRevsHooks::showApprovedRevision"
+		],
+		"ArticleViewHeader": [
+			"ApprovedRevsHooks::setArticleHeader",
+			"ApprovedRevsHooks::displayNotApprovedHeader"
+		],
+		"BeforeParserFetchFileAndTitle": [
+			"ApprovedRevsHooks::modifyFileLinks"
+		],
+		"BeforeParserFetchTemplateAndtitle": [
+			"ApprovedRevsHooks::setTranscludedPageRev"
+		],
+		"DifferenceEngineNewHeader": [
+			"ApprovedRevsHooks::addApprovalDiffLinkNewHeader"
+		],
+		"DiffRevisionTools": [
+			"ApprovedRevsHooks::addApprovalDiffLink"
+		],
+		"DisplayOldSubtitle": [
+			"ApprovedRevsHooks::setSubtitle"
+		],
+		"EditPage::showEditForm:initial": [
+			"ApprovedRevsHooks::addWarningToEditPage"
+		],
+		"FileDeleteComplete": [
+			"ApprovedRevsHooks::onFileDeleteComplete"
+		],
+		"ImagePageFileHistoryLine": [
+			"ApprovedRevsHooks::onImagePageFileHistoryLine"
+		],
+		"ImagePageFindFile": [
+			"ApprovedRevsHooks::onImagePageFindFile"
+		],
+		"LoadExtensionSchemaUpdates": [
+			"ApprovedRevsHooks::describeDBSchema"
+		],
+		"MagicWordwgVariableIDs": [
+			"ApprovedRevsHooks::addMagicWordVariableIDs"
+		],
+		"OutputPageBodyAttributes": [
+			"ApprovedRevsHooks::addBodyClass"
 		],
 		"PageContentSaveComplete": [
 			"ApprovedRevsHooks::setLatestAsApproved",
 			"ApprovedRevsHooks::setSearchText"
 		],
-		"SearchResultInitFromTitle": [
-			"ApprovedRevsHooks::setSearchRevisionID"
-		],
-		"PersonalUrls": [
-			"ApprovedRevsHooks::removeRobotsTag"
-		],
-		"ArticleFromTitle": [
-			"ApprovedRevsHooks::showApprovedRevision"
-		],
-		"ArticleAfterFetchContentObject": [
-			"ApprovedRevsHooks::showBlankIfUnapproved"
-		],
-		"DisplayOldSubtitle": [
-			"ApprovedRevsHooks::setSubtitle"
-		],
-		"SkinTemplateNavigation": [
-			"ApprovedRevsHooks::changeEditLink"
+		"PageForms::HTMLBeforeForm": [
+			"ApprovedRevsHooks::addWarningToPFForm"
 		],
 		"PageHistoryBeforeList": [
 			"ApprovedRevsHooks::storeApprovedRevisionForHistoryPage"
@@ -115,54 +152,20 @@
 		"PageHistoryLineEnding": [
 			"ApprovedRevsHooks::addApprovalLink"
 		],
-		"DiffRevisionTools": [
-			"ApprovedRevsHooks::addApprovalDiffLink"
-		],
-		"BeforeParserFetchTemplateAndtitle": [
-			"ApprovedRevsHooks::setTranscludedPageRev"
-		],
-		"ArticleDeleteComplete": [
-			"ApprovedRevsHooks::deleteRevisionApproval"
-		],
-		"MagicWordwgVariableIDs": [
-			"ApprovedRevsHooks::addMagicWordVariableIDs"
-		],
 		"ParserBeforeTidy": [
 			"ApprovedRevsHooks::handleMagicWords"
 		],
 		"ParserFirstCallInit": [
 			"ApprovedRevsHooks::registerFunctions"
 		],
-		"AdminLinks": [
-			"ApprovedRevsHooks::addToAdminLinks"
+		"PersonalUrls": [
+			"ApprovedRevsHooks::removeRobotsTag"
 		],
-		"LoadExtensionSchemaUpdates": [
-			"ApprovedRevsHooks::describeDBSchema"
+		"SearchResultInitFromTitle": [
+			"ApprovedRevsHooks::setSearchRevisionID"
 		],
-		"EditPage::showEditForm:initial": [
-			"ApprovedRevsHooks::addWarningToEditPage"
-		],
-		"PageForms::HTMLBeforeForm": [
-			"ApprovedRevsHooks::addWarningToPFForm"
-		],
-		"ArticleViewHeader": [
-			"ApprovedRevsHooks::setArticleHeader",
-			"ApprovedRevsHooks::displayNotApprovedHeader"
-		],
-		"OutputPageBodyAttributes": [
-			"ApprovedRevsHooks::addBodyClass"
-		],
-		"ImagePageFileHistoryLine": [
-			"ApprovedRevsHooks::onImagePageFileHistoryLine"
-		],
-		"BeforeParserFetchFileAndTitle": [
-			"ApprovedRevsHooks::modifyFileLinks"
-		],
-		"ImagePageFindFile": [
-			"ApprovedRevsHooks::onImagePageFindFile"
-		],
-		"FileDeleteComplete": [
-			"ApprovedRevsHooks::onFileDeleteComplete"
+		"SkinTemplateNavigation": [
+			"ApprovedRevsHooks::changeEditLink"
 		],
 		"wgQueryPages": [
 			"ApprovedRevsHooks::onwgQueryPages"
@@ -182,6 +185,7 @@
 		"ApprovedRevsSelfOwnedNamespaces": [],
 		"ApprovedRevsBlankIfUnapproved": false,
 		"ApprovedRevsAutomaticApprovals": true,
+		"ApprovedRevsShowRevisionDiffBigButton": false,
 		"ApprovedRevsShowApproveLatest": false,
 		"ApprovedRevsShowNotApprovedMessage": false
 	},

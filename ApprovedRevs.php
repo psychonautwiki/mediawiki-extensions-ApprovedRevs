@@ -51,6 +51,7 @@ $egApprovedRevsEnabledNamespaces = array(
 $egApprovedRevsSelfOwnedNamespaces = array();
 $egApprovedRevsBlankIfUnapproved = false;
 $egApprovedRevsAutomaticApprovals = true;
+$egApprovedRevsShowRevisionDiffBigButton = false;
 $egApprovedRevsShowApproveLatest = false;
 $egApprovedRevsShowNotApprovedMessage = false;
 
@@ -79,30 +80,31 @@ $wgActions['approvefile'] = 'ARApproveFileAction';
 $wgActions['unapprovefile'] = 'ARUnapproveFileAction';
 
 // hooks
+$wgHooks['AdminLinks'][] = 'ApprovedRevsHooks::addToAdminLinks';
+$wgHooks['ArticleAfterFetchContentObject'][] = 'ApprovedRevsHooks::showBlankIfUnapproved';
+$wgHooks['ArticleDeleteComplete'][] = 'ApprovedRevsHooks::deleteRevisionApproval';
 $wgHooks['ArticleEditUpdates'][] = 'ApprovedRevsHooks::updateLinksAfterEdit';
+$wgHooks['ArticleFromTitle'][] = 'ApprovedRevsHooks::showApprovedRevision';
+$wgHooks['ArticleViewHeader'][] = 'ApprovedRevsHooks::displayNotApprovedHeader';
+$wgHooks['ArticleViewHeader'][] = 'ApprovedRevsHooks::setArticleHeader';
+$wgHooks['BeforeParserFetchTemplateAndtitle'][] = 'ApprovedRevsHooks::setTranscludedPageRev';
+$wgHooks['DifferenceEngineNewHeader'][] = 'ApprovedRevsHooks::addApprovalDiffLinkNewHeader';
+$wgHooks['DiffRevisionTools'][] = 'ApprovedRevsHooks::addApprovalDiffLink';
+$wgHooks['DisplayOldSubtitle'][] = 'ApprovedRevsHooks::setSubtitle';
+$wgHooks['EditPage::showEditForm:initial'][] = 'ApprovedRevsHooks::addWarningToEditPage';
+$wgHooks['LoadExtensionSchemaUpdates'][] = 'ApprovedRevsHooks::describeDBSchema';
+$wgHooks['MagicWordwgVariableIDs'][] = 'ApprovedRevsHooks::addMagicWordVariableIDs';
+$wgHooks['OutputPageBodyAttributes'][] = 'ApprovedRevsHooks::addBodyClass';
 $wgHooks['PageContentSaveComplete'][] = 'ApprovedRevsHooks::setLatestAsApproved';
 $wgHooks['PageContentSaveComplete'][] = 'ApprovedRevsHooks::setSearchText';
-$wgHooks['SearchResultInitFromTitle'][] = 'ApprovedRevsHooks::setSearchRevisionID';
-$wgHooks['PersonalUrls'][] = 'ApprovedRevsHooks::removeRobotsTag';
-$wgHooks['ArticleFromTitle'][] = 'ApprovedRevsHooks::showApprovedRevision';
-$wgHooks['ArticleAfterFetchContentObject'][] = 'ApprovedRevsHooks::showBlankIfUnapproved';
-$wgHooks['DisplayOldSubtitle'][] = 'ApprovedRevsHooks::setSubtitle';
-$wgHooks['SkinTemplateNavigation'][] = 'ApprovedRevsHooks::changeEditLink';
+$wgHooks['PageForms::HTMLBeforeForm'][] = 'ApprovedRevsHooks::addWarningToPFForm';
 $wgHooks['PageHistoryBeforeList'][] = 'ApprovedRevsHooks::storeApprovedRevisionForHistoryPage';
 $wgHooks['PageHistoryLineEnding'][] = 'ApprovedRevsHooks::addApprovalLink';
-$wgHooks['DiffRevisionTools'][] = 'ApprovedRevsHooks::addApprovalDiffLink';
-$wgHooks['BeforeParserFetchTemplateAndtitle'][] = 'ApprovedRevsHooks::setTranscludedPageRev';
-$wgHooks['ArticleDeleteComplete'][] = 'ApprovedRevsHooks::deleteRevisionApproval';
-$wgHooks['MagicWordwgVariableIDs'][] = 'ApprovedRevsHooks::addMagicWordVariableIDs';
 $wgHooks['ParserBeforeTidy'][] = 'ApprovedRevsHooks::handleMagicWords';
 $wgHooks['ParserFirstCallInit'][] = 'ApprovedRevsHooks::registerFunctions';
-$wgHooks['AdminLinks'][] = 'ApprovedRevsHooks::addToAdminLinks';
-$wgHooks['LoadExtensionSchemaUpdates'][] = 'ApprovedRevsHooks::describeDBSchema';
-$wgHooks['EditPage::showEditForm:initial'][] = 'ApprovedRevsHooks::addWarningToEditPage';
-$wgHooks['PageForms::HTMLBeforeForm'][] = 'ApprovedRevsHooks::addWarningToPFForm';
-$wgHooks['ArticleViewHeader'][] = 'ApprovedRevsHooks::setArticleHeader';
-$wgHooks['ArticleViewHeader'][] = 'ApprovedRevsHooks::displayNotApprovedHeader';
-$wgHooks['OutputPageBodyAttributes'][] = 'ApprovedRevsHooks::addBodyClass';
+$wgHooks['PersonalUrls'][] = 'ApprovedRevsHooks::removeRobotsTag';
+$wgHooks['SearchResultInitFromTitle'][] = 'ApprovedRevsHooks::setSearchRevisionID';
+$wgHooks['SkinTemplateNavigation'][] = 'ApprovedRevsHooks::changeEditLink';
 $wgHooks['wgQueryPages'][] = 'ApprovedRevsHooks::onwgQueryPages';
 
 // Approved File Revisions
@@ -110,7 +112,6 @@ $wgHooks['ImagePageFileHistoryLine'][] = 'ApprovedRevsHooks::onImagePageFileHist
 $wgHooks['BeforeParserFetchFileAndTitle'][] = 'ApprovedRevsHooks::modifyFileLinks';
 $wgHooks['ImagePageFindFile'][] = 'ApprovedRevsHooks::onImagePageFindFile';
 $wgHooks['FileDeleteComplete'][] = 'ApprovedRevsHooks::onFileDeleteComplete';
-
 
 // logging
 $wgLogTypes['approval'] = 'approval';
