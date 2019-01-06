@@ -477,6 +477,8 @@ class ApprovedRevs {
 	 * info for extensions such as Semantic MediaWiki; and logs the action.
 	 */
 	public static function setApprovedRevID( Title $title, $rev_id, $is_latest = false, $user ) {
+		$prevApprovedRev = ApprovedRevs::getApprovedRevID( $title );
+
 		self::saveApprovedRevIDInDB( $title, $rev_id, false );
 
 		$content = Revision::newFromTitle( $title, $rev_id )->getContent();
@@ -504,6 +506,7 @@ class ApprovedRevs {
 		$logParams = [
 			'rev_link' => $rev_link,
 			'rev_id' => $rev_id,
+			'old_rev_id' => $prevApprovedRev
 		];
 
 		$entry = new ManualLogEntry( 'approval', 'approve' );
