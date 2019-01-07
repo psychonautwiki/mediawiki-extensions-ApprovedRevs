@@ -48,7 +48,7 @@ class ApprovedRevs {
 
 		// since extension.json values have to be strings, convert to int
 		// changes [ "0" => true, "10" => false, "14" => true ] to [0, 14]
-		self::$mApprovedRevsNamespaces = array_keys( $egApprovedRevsEnabledNamespaces );
+		self::$mApprovedRevsNamespaces = array_keys( array_filter( $egApprovedRevsEnabledNamespaces ) );
 
 		return self::$mApprovedRevsNamespaces;
 	}

@@ -177,15 +177,9 @@ class ApprovedRevsHooks {
 	 * been requested.
 	 */
 	static function showApprovedRevision( &$title, &$article, $context ) {
-		global $egApprovedRevsEnabledNamespaces;
-
 		$namespace = $title->getNamespace();
 
-		if ( ! in_array( $namespace, $egApprovedRevsEnabledNamespaces ) ) {
-			return true;
-		}
-
-		if ( $namespace !== 0 && $namespace !== 6 && $namespace !== 10 ) {
+		if ( ! in_array( $namespace, ApprovedRevs::getApprovableNamespaces() ) ) {
 			return true;
 		}
 
